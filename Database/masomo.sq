@@ -1,0 +1,98 @@
+CREATE DATABASE IF NOT EXISTS masomo_track;
+USE masomo_track;
+
+CREATE TABLE IF NOT EXISTS organizations (
+    org_id INT AUTO_INCREMENT PRIMARY KEY,
+    org_name VARCHAR(100) NOT NULL,
+    org_code VARCHAR(10) UNIQUE,
+    admin_password_hash VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS staff (
+    staff_id INT AUTO_INCREMENT PRIMARY KEY,
+    org_id INT NOT NULL,
+    full_name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    role ENUM('Admin', 'Teacher') DEFAULT 'Teacher',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (org_id) REFERENCES organizations(org_id) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS lessons (
+    lesson_id INT AUTO_INCREMENT PRIMARY KEY,
+    staff_id INT NOT NULL,
+    lesson_name VARCHAR(100) NOT NULL,
+    lesson_code VARCHAR(20) UNIQUE NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (staff_id) REFERENCES staff(staff_id) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS students (
+    student_id VARCHAR(20) PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    face_vector MEDIUMTEXT,
+    guardian_phone VARCHAR(20),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS student_enrollment (
+    enrollment_id INT AUTO_INCREMENT PRIMARY KEY,
+    student_id VARCHAR(20) NOT NULL,
+    lesson_id INT NOT NULL,
+    enrolled_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE,
+    FOREIGN KEY (lesson_id) REFERENCES lessons(lesson_id) ON DELETE CASCADE,
+    UNIQUE KEY unique_enrollment (student_id, lesson_id)
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS attendance_sessions (
+    session_id INT AUTO_INCREMENT PRIMARY KEY,
+    lesson_id INT NOT NULL,
+    session_date DATE NOT NULL,
+    session_start TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+    session_end TIMESTAMP NULL,
+    status ENUM('Active', 'Closed') DEFAULT 'Active',
+    FOREIGN KEY (lesson_id) REFERENCES lessons(lesson_id) ON DELETE CASCADE,
+    UNIQUE KEY unique_session (lesson_id, session_date)
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS attendance_logs (
+    log_id INT AUTO_INCREMENT PRIMARY KEY,
+    session_id INT NOT NULL,
+    student_id VARCHAR(20) NOT NULL,
+    lesson_id INT NOT NULL,
+    face_capture MEDIUMTEXT,
+    status ENUM('Present', 'Absent') DEFAULT 'Absent',
+    check_in_time TIMESTAMP NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (session_id) REFERENCES attendance_sessions(session_id) ON DELETE CASCADE,
+    FOREIGN KEY (student_id) REFERENCES students(student_id) ON DELETE CASCADE,
+    FOREIGN KEY (lesson_id) REFERENCES lessons(lesson_id) ON DELETE CASCADE,
+    UNIQUE KEY unique_attendance (session_id, student_id)
+) ENGINE=InnoDB;
+
+INSERT INTO organizations (org_name, org_code, admin_password_hash)
+VALUES ('KCA University', 'KCAU', 'ee2bcc4e0509cb34f344e5b3f66459b79419716ad809cab388ea79cc482a13e3')
+ON DUPLICATE KEY UPDATE org_name = VALUES(org_name);
+
+INSERT INTO staff (org_id, full_name, email, password_hash, role)
+VALUES (1, 'KCA Admin', 'admin@kcau.ac.ke', 'ee2bcc4e0509cb34f344e5b3f66459b79419716ad809cab388ea79cc482a13e3', 'Admin')
+ON DUPLICATE KEY UPDATE full_name = VALUES(full_name);
+
+INSERT INTO lessons (staff_id, lesson_name, lesson_code)
+VALUES
+    (1, 'Web Development', 'WEB101'),
+    (1, 'Programming', 'PRG101'),
+    (1, 'Java', 'JAVA101'),
+    (1, 'Statistics', 'STAT101'),
+    (1, 'Database Systems', 'DBS201'),
+    (1, 'Data Structures', 'DSA201'),
+    (1, 'Operating Systems', 'OS202'),
+    (1, 'Computer Networks', 'NET202'),
+    (1, 'Software Engineering', 'SWE301'),
+    (1, 'Mobile App Development', 'MAD301'),
+    (1, 'Artificial Intelligence', 'AI401'),
+    (1, 'Cyber Security', 'SEC401')
+ON DUPLICATE KEY UPDATE lesson_name = VALUES(lesson_name);

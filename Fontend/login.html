@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Masomo Track</title>
+    <link rel="stylesheet" href="auth.css">
+</head>
+<body>
+    <div class="auth-card">
+        <h1>Masomo Login</h1>
+        <p>Sign in with your institution staff account.</p>
+        <p id="backend-status" class="status-check">Checking backend status...</p>
+        <form id="login-form">
+            <label for="email">Email</label>
+            <input id="email" type="email" required placeholder="admin@kcau.ac.ke">
+
+            <label for="password">Password</label>
+            <input id="password" type="password" required placeholder="Enter password">
+
+            <button type="submit">Login</button>
+        </form>
+        <div id="login-message"></div>
+        <p class="note">No institution account? <a href="signin.html">Create one</a></p>
+    </div>
+    <script src="login.js"></script>
+</body>
+</html>

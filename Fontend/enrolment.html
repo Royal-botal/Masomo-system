@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Enrollment - Masomo Track</title>
+<link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+    <div class="dashboard-container">
+       
+        <header class="dashboard-header">
+            <div class="header-left">
+                <h1>MASOMO-TRACK</h1>
+                <p>Student Enrollment</p>
+            </div>
+            <nav class="quick-links">
+                <a href="dashboard.html">Dashboard</a> |
+                <a href="enrolment.html">Enrollment</a> |
+                <a href="attendance.html">Live Attendance</a> |
+                <a href="report.html">Reports</a>
+            </nav>
+            <div class="header-right">
+                <div class="user-info">
+                    <span id="teacher-name">Teacher</span>
+                    <button class="logout-btn" onclick="logout()">Logout</button>
+                </div>
+            </div>
+        </header>
+
+        <main class="dashboard-main">
+
+            <aside class="sidebar">
+                <nav class="nav-menu">
+                    <button class="nav-item" onclick="goToDashboard()">
+                        📊 Dashboard
+                    </button>
+                    <button class="nav-item active" onclick="refreshStats()">
+                        👥 Enrollment
+                    </button>
+                    <button class="nav-item" onclick="goToAttendance()">
+                        📸 Live Attendance
+                    </button>
+                    <button class="nav-item" onclick="goToReport()">
+                        📋 Reports
+                    </button>
+                </nav>
+            </aside>
+
+            
+            <section class="content-area">
+                
+                <div class="section active">
+                    <h2>Student Enrollment</h2>
+                    
+                    
+                    <div id="register-step" class="form-card">
+                        <h3>Step 1: Register New Student</h3>
+                        <form id="student-form">
+                            <div class="form-group">
+                                <label>Student ID:</label>
+                                <input type="text" id="student-id" placeholder="e.g., STU001" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Full Name:</label>
+                                <input type="text" id="student-name" placeholder="Enter student name" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Phone number:</label>
+                                <input type="tel" id="phone-number" placeholder="e.g., +254712345678">
+                            </div>
+                            <div class="form-group">
+                                <label>Session / Course:</label>
+                                <select id="lesson-id" required>
+                                    <option value="">Loading sessions...</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Add Session Manually:</label>
+                                <div class="control-panel" style="margin-bottom: 0;">
+                                    <input type="text" id="manual-session-name" placeholder="e.g., Cloud Computing">
+                                    <button type="button" class="btn secondary" onclick="addManualSession()">
+                                        + Add Session
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Capture Face Photo:</label>
+                                <div class="camera-capture">
+                                    <video id="student-video" width="320" height="240" autoplay playsinline muted></video>
+                                    <button type="button" class="btn secondary" onclick="captureStudentFace()">
+                                        📸 Capture Photo
+                                    </button>
+                                    <canvas id="student-canvas" width="320" height="240" style="display:none;"></canvas>
+                                    <p id="face-status" style="color: #999; font-size: 0.9rem; margin-top: 10px;">Click "Capture Photo" to take a face photo</p>
+                                </div>
+                                <input type="hidden" id="face-data">
+                            </div>
+                            <button type="submit" class="btn primary" style="width: 100%; margin-top: 20px;">
+                                ➡️ Next: Verify Face
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Step 2: Verify Student Face -->
+                    <div id="verify-step" class="form-card hidden">
+                        <h3>Step 2: Verify Student Face</h3>
+                        <div class="verification-info">
+                            <p><strong>Student:</strong> <span id="verify-student-name">--</span></p>
+                            <p><strong>Student ID:</strong> <span id="verify-student-id">--</span></p>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Scan Face to Verify Registration:</label>
+                            <div class="camera-capture">
+                                <video id="verify-video" width="320" height="240" autoplay playsinline muted></video>
+                                <button type="button" class="btn primary" onclick="verifyScanFace()">
+                                    🎥 Scan Face
+                                </button>
+                                <canvas id="verify-canvas" width="320" height="240" style="display:none;"></canvas>
+                            </div>
+                            <p id="verify-status" style="color: #3498db; font-size: 0.9rem; margin-top: 10px;">Position face in camera and click "Scan Face"</p>
+                        </div>
+
+                        <div id="verification-result" class="hidden" style="margin-top: 20px; padding: 15px; border-radius: 8px; text-align: center;">
+                            <p id="result-message" style="font-size: 1.1rem; font-weight: 600;"></p>
+                            <button class="btn primary" onclick="completeRegistration()" style="margin-top: 10px;">
+                                ✅ Complete Registration
+                            </button>
+                            <button class="btn secondary" onclick="retakeVerification()" style="margin-top: 10px;">
+                                🔄 Retake Scan
+                            </button>
+                        </div>
+
+                        <button class="btn secondary" onclick="backToRegister()" style="width: 100%; margin-top: 20px;">
+                            ⬅️ Back
+                        </button>
+                    </div>
+
+                    <!-- Students List -->
+                    <div id="students-list-card" class="list-card hidden">
+                        <h3>Enrolled Students</h3>
+                        <div id="students-list" class="students-table">
+                            <p>Loading students...</p>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div id="loading" class="loading hidden">
+        <div class="spinner"></div>
+        <p>Processing...</p>
+    </div>
+
+    <!-- Error Message -->
+    <div id="error-message" class="error-message hidden"></div>
+
+    <!-- Success Message -->
+    <div id="success-message" class="success-message hidden"></div>
+
+<script src="enrolment.js"></script>
+</body>
+</html>

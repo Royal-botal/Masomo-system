@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Attendance - Masomo Track</title>
+<link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="header-left">
+                <h1>MASOMO-TRACK</h1>
+                <p>Live Attendance Tracking</p>
+                <nav class="quick-links">
+                    <a href="dashboard.html">Dashboard</a> |
+                    <a href="enrolment.html">Enrollment</a> |
+                    <a href="attendance.html">Live Attendance</a> |
+                    <a href="report.html">Reports</a>
+                </nav>
+            </div>
+            <div class="header-right">
+                <div class="user-info">
+                    <span id="teacher-name">Teacher</span>
+                    <button class="logout-btn" onclick="logout()">Logout</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="dashboard-main">
+            <!-- Sidebar Navigation -->
+            <aside class="sidebar">
+                <nav class="nav-menu">
+                    <button class="nav-item" onclick="goToDashboard()">
+                        📊 Dashboard
+                    </button>
+                    <button class="nav-item" onclick="goToEnrollment()">
+                        👥 Enrollment
+                    </button>
+                    <button class="nav-item active" onclick="refreshStats()">
+                        📸 Live Attendance
+                    </button>
+                    <button class="nav-item" onclick="goToReport()">
+                        📋 Reports
+                    </button>
+                </nav>
+            </aside>
+
+            <!-- Content Sections -->
+            <section class="content-area">
+                <!-- Live Attendance Section -->
+                <div class="section active">
+                    <h2>Live Attendance</h2>
+                    
+                    <!-- Attendance Controls -->
+                    <div class="control-panel" style="margin-bottom: 30px;">
+                        <div class="form-group">
+                            <label>Select Lesson:</label>
+                            <select id="lesson-select" class="form-control" onchange="handleLessonChange()">
+                                <option value="">Select a Lesson</option>
+                            </select>
+                        </div>
+                        <button class="btn primary" id="start-session-btn" onclick="startSession()">
+                            ▶️ Start Session
+                        </button>
+                        <button class="btn danger hidden" id="end-session-btn" onclick="endSession()">
+                            ⏹️ End Session
+                        </button>
+                    </div>
+
+                    <!-- Session Status -->
+                    <div id="session-status" class="status-card hidden">
+                        <h3>Session Status</h3>
+                        <p>Session ID: <strong id="current-session-id">--</strong></p>
+                        <p>Status: <strong id="session-status-text">Inactive</strong></p>
+                        <p>Students Present: <strong id="present-count">0</strong> / <strong id="total-count">0</strong></p>
+                    </div>
+
+                    <!-- Face Recognition Camera -->
+                    <div id="camera-section" class="camera-section hidden">
+                        <h3>Face Recognition Camera</h3>
+                        <video id="attendance-video" width="640" height="480" autoplay playsinline muted></video>
+                        <div class="recognition-info">
+                            <p id="recognition-message">Waiting for face...</p>
+                            <p id="recognized-student">Student: --</p>
+                        </div>
+                        <canvas id="attendance-canvas" width="640" height="480" style="display:none;"></canvas>
+                        <div class="list-card" style="margin-top: 20px; text-align: left;">
+                            <h3>Recent Face Records</h3>
+                            <div id="face-records" class="students-table">
+                                <p>No face records yet.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div id="loading" class="loading hidden">
+        <div class="spinner"></div>
+        <p>Processing...</p>
+    </div>
+
+    <!-- Error Message -->
+    <div id="error-message" class="error-message hidden"></div>
+
+    <!-- Success Message -->
+    <div id="success-message" class="success-message hidden"></div>
+
+    <script src="attendance.js"></script>
+</body>
+</html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance Reports - Masomo Track</title>
+<link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="header-left">
+                <h1>MASOMO-TRACK</h1>
+                <p>Attendance Reports</p>
+                <nav class="quick-links">
+                    <a href="dashboard.html">Dashboard</a> |
+                    <a href="enrolment.html">Enrollment</a> |
+                    <a href="attendance.html">Live Attendance</a> |
+                    <a href="report.html">Reports</a>
+                </nav>
+            </div>
+            <div class="header-right">
+                <div class="user-info">
+                    <span id="teacher-name">Teacher</span>
+                    <button class="logout-btn" onclick="logout()">Logout</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="dashboard-main">
+            <!-- Sidebar Navigation -->
+            <aside class="sidebar">
+                <nav class="nav-menu">
+                    <button class="nav-item" onclick="goToDashboard()">
+                        📊 Dashboard
+                    </button>
+                    <button class="nav-item" onclick="goToEnrollment()">
+                        👥 Enrollment
+                    </button>
+                    <button class="nav-item" onclick="goToAttendance()">
+                        📸 Live Attendance
+                    </button>
+                    <button class="nav-item active" onclick="refreshStats()">
+                        📋 Reports
+                    </button>
+                </nav>
+            </aside>
+
+            <!-- Content Sections -->
+            <section class="content-area">
+                <!-- Reports Section -->
+                <div class="section active">
+                    <h2>Attendance Reports</h2>
+
+                    <div class="list-card" style="margin-bottom: 30px;">
+                        <h3>Registered Students</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Student ID</th>
+                                    <th>Name</th>
+                                    <th>Session</th>
+                                    <th>Registered At</th>
+                                    <th>Face Scanned</th>
+                                </tr>
+                            </thead>
+                            <tbody id="registered-table">
+                                <tr><td colspan="5">Loading registered students...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Report Selection -->
+                    <div class="control-panel" style="margin-bottom: 30px;">
+                        <div class="form-group">
+                            <label>Select Session:</label>
+                            <select id="session-select" class="form-control">
+                                <option value="">Loading sessions...</option>
+                            </select>
+                        </div>
+                        <button class="btn primary" onclick="loadReport()">
+                            📊 Generate Report
+                        </button>
+                        <button class="btn secondary" onclick="printReport()">
+                            🖨️ Print Report
+                        </button>
+                    </div>
+
+                    <!-- Report Display -->
+                    <div id="report-display" class="hidden" style="margin-top: 30px;">
+                        <!-- Summary Stats -->
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <h3>Total Students</h3>
+                                <p class="stat-number" id="report-total">0</p>
+                            </div>
+                            <div class="stat-card">
+                                <h3>Present</h3>
+                                <p class="stat-number" id="report-present">0</p>
+                            </div>
+                            <div class="stat-card">
+                                <h3>Absent</h3>
+                                <p class="stat-number" id="report-absent">0</p>
+                            </div>
+                            <div class="stat-card">
+                                <h3>Attendance Rate</h3>
+                                <p class="stat-number" id="report-rate">0%</p>
+                            </div>
+                        </div>
+
+                        <!-- Present Students Table -->
+                        <div class="list-card">
+                            <h3>Present Students</h3>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Student ID</th>
+                                        <th>Name</th>
+                                        <th>Check-in Time</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="present-table">
+                                    <tr><td colspan="3">No data</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Absent Students Table -->
+                        <div class="list-card">
+                            <h3>Absent Students</h3>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Student ID</th>
+                                        <th>Name</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="absent-table">
+                                    <tr><td colspan="2">No data</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div id="loading" class="loading hidden">
+        <div class="spinner"></div>
+        <p>Processing...</p>
+    </div>
+
+    <!-- Error Message -->
+    <div id="error-message" class="error-message hidden"></div>
+
+    <!-- Success Message -->
+    <div id="success-message" class="success-message hidden"></div>
+
+    <script src="report.js"></script>
+</body>
+</html>

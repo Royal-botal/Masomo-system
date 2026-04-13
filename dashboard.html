@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Dashboard - Masomo Track</title>
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+    <div class="dashboard-container">
+       
+        <header class="dashboard-header">
+            <div class="header-left">
+                <h1>MASOMO-TRACK</h1>
+                <p>Attendance Management System</p>
+                <nav class="quick-links">
+                    <a href="dashboard.html">Dashboard</a> |
+                    <a href="enrolment.html">Enrollment</a>|
+                    <a href="report.html">Reports</a>|
+                    <a href="attendance.html">Live Attendance</a>
+                </nav>
+            </div>
+            <div class="header-right">
+                <div class="user-info">
+                    <span id="teacher-name">Teacher</span>
+                    <button class="logout-btn" onclick="logout()">Logout</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="dashboard-main">
+            <!-- Sidebar Navigation -->
+            <aside class="sidebar">
+                <nav class="nav-menu">
+                    <button class="nav-item active" onclick="location.reload()">
+                        📊 Dashboard
+                    </button>
+                    <button class="nav-item" onclick="goToEnrollment()">
+                        👥 Enrollment
+                    </button>
+                    <button class="nav-item" onclick="goToAttendance()">
+                        📸 Live Attendance
+                    </button>
+                    <button class="nav-item" onclick="goToReport()">
+                        📋 Reports
+                    </button>
+                </nav>
+            </aside>
+
+            <!-- Content Sections -->
+            <section class="content-area">
+
+                <!-- Overview Section -->
+                <div id="overview" class="section active">
+                    <h2>Dashboard Overview</h2>
+                    <div class="control-panel">
+                        <div class="form-group" style="margin-bottom: 0; flex: 1;">
+                            <label for="session-filter">Session Course</label>
+                            <select id="session-filter" class="form-control">
+                                <option value="">All Sessions</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <h3>Active Sessions</h3>
+                            <p class="stat-number" id="active-sessions">0</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Total Students</h3>
+                            <p class="stat-number" id="total-students">0</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Sessions Completed</h3>
+                            <p class="stat-number" id="completed-sessions">0</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Students In Session</h3>
+                            <p class="stat-number" id="students-in-session">0</p>
+                        </div>
+                    </div>
+
+                    <div class="quick-actions">
+                        <h3>Quick Actions</h3>
+                        <button class="action-btn primary" onclick="goToEnrollment()">
+                            👥 Enroll Students
+                        </button>
+                        <button class="action-btn primary" onclick="goToAttendance()">
+                            🎥 Take Attendance
+                        </button>
+                        <button class="action-btn secondary" onclick="goToReport()">
+                            📊 View Reports
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Hidden - Old Manage Students Section -->
+            </section>
+        </main>
+    </div>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>
